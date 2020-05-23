@@ -60,7 +60,7 @@ ORDER BY
   month, 
   pct
 '''
-df_ccg = bq.cached_read(sql, csv_path=os.path.join('..','data','df_ccg.csv'))
+df_ccg = bq.cached_read(sql, csv_path=os.path.join('..','data','df_ccg.csv'), cache=True)
 df_ccg['month'] = df_ccg['month'].astype('datetime64[ns]')
 
 # ## Increase in uptake of DOACs nationally
@@ -68,16 +68,17 @@ df_ccg['month'] = df_ccg['month'].astype('datetime64[ns]')
 df_ccg_overall = df_ccg.drop(columns=["perc_doacs"])
 df_ccg_overall.groupby("month").sum().plot(kind='line', title="Prescriptions for DOACs")
 
-# ## Map of CCG uptake of DOACs in March 2020
+# ## Map of CCG uptake of DOACs in latest month
 
-#create only March 2020 CCG data
+#create only latest month's CCG data
 latest_date = df_ccg['month'].max()
-df_ccg_map = df_ccg.loc[df_ccg['month'] == recent_date] # *need to create string to label graph automatically*
+df_ccg_map = df_ccg.loc[df_ccg['month'] == latest_date]
+ld_string = latest_date.month_name() + " " + str(latest_date.year) #this creates string to label chart
 
 plt.figure(figsize=(20, 7))
 maps.ccg_map(
     df_ccg_map,
-    title='Percentage of DOACs and warfarin prescribed as DOACS\n(March 2020)',
+    title='Percentage of DOACs and warfarin prescribed as DOACS\n(' + ld_string + ')',
     column='perc_doacs', 
     separate_london=True,
     plot_options={'vmax': 100, 'vmin': 0, 'cmap': 'coolwarm'}
@@ -94,3 +95,5 @@ charts.deciles_chart(
         title="CCGs - Percentage of DOACs and warfarin \nprescribed as DOACS",
         show_outer_percentiles=True)
 plt.show()
+
+
