@@ -15,8 +15,11 @@ ebmdatalab
 matplotlib
 tqdm
 
+
 # Both these required for plotly+notebooks
 plotly
 ipywidgets
 
 # Add extra per-notebook packages here
+change_detection
+lib.outliers
