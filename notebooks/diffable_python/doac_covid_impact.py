@@ -105,19 +105,5 @@ ax = df_doac_measure.groupby(["month"])['total_doac_items'].sum().plot(kind='lin
 plt.ylim(0, )
 
 # +
-#create sample deciles & prototype measure
-charts.deciles_chart(
-        df_doac_measure,
-        period_column='month',
-        column='calc_value',
-        title="DOACs as a proprotion of DOACs plus Warfarin  \n CCG deciles",
-        show_outer_percentiles=True)
-
-#add in example CCG (Devon)
-df_subject = df_doac_measure.loc[df_doac_measure['pct'] == '08H']
-plt.plot(df_subject['month'], df_subject['calc_value'], 'r--')
-
-plt.show()
-# -
 
 
